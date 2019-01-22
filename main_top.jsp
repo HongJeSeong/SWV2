@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -39,7 +41,7 @@
 				<a href="/jenkins" target="main_bottom">Continuous Integration</a>
 			</td>
 			<td width="130">
-				<a href="dashboard.php" target="main_bottom">Dashboard</a>
+				<a href="dashboard.jsp" target="main_bottom">Dashboard</a>
 			</td>
 			<td width="170">
 				<a href="setTraceability.html" target="main_bottom">Traceability Setting</a>
@@ -48,7 +50,7 @@
 				<a href="TraceabilityViewerMain.html" target="main_bottom">Traceability Viewer</a>
 			</td>
 			<td width="100">
-				<a href="logout.php" target="_parent">Logout</a>
+				<a href="logout.jsp" target="_parent">Logout</a>
 			</td>
 		</tr>
 	</table>

@@ -1,4 +1,4 @@
-
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
@@ -14,7 +14,7 @@
 
 			if(rd.readyState == "complete"){
 				rd.forms[2].submit();
-				location.href='/';
+				location.href='/index.jsp';
 			} else {
 				console.log(func_name);
 				setTimeout(func_name, 500);
@@ -22,12 +22,16 @@
 		}
 
 		window.onload = function(){
-<?php
-	if(isset($_GET['error'])){
-		if($_GET['error']=="1") echo 'alert("Login Failed(1). Login Again");';
-		else if($_GET['error']=="2") echo 'alert("Login Failed(1). Login Again");';
-	}
-?>
+<%	 
+	request.setCharacterEncoding("UTF-8");
+	String error=request.getParameter("error");
+	 if(error.equals("1")){
+	 		out.println("alert('Login Failed(1). Login Again');");
+	 		 
+	 }else if(error.equals("2")){
+	 		out.println("alert('Login Failed(2). Login Again');");
+	 }
+%>
 			logoutRedmine();
 		}
 	</script>
@@ -37,9 +41,9 @@
 <div id="msg" align="center" style="position: relative; top: 200px;">
 	<img src="loading.gif"/>
 </div>
-<div style="display:none;">
-	<iframe id="frame_redmine" src="/redmine/logout" style="width:500px;height:300px;"></iframe>
-	<iframe id="frame_jenkins" src="/jenkins/logout" style="width:500px;height:300px;"></iframe>
+<div style="">
+	<iframe id="frame_redmine" src="/redmine/logout" style="width:100%;height:700px;"></iframe>
+	<iframe id="frame_jenkins" src="/jenkins/logout" style="width:100%;height:700px;"></iframe>
 </div>
 </body>
 

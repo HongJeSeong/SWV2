@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 
@@ -106,7 +107,7 @@
 
 <br/>
 <br/>
-	<form method="post" action="login.php">
+	<form method="post" action="login.jsp">
 	<table id="main_table" align="center" valign="center" width="600" cellpadding="5" cellspacing="0" border="0">
 		<tr>
 			<td>
