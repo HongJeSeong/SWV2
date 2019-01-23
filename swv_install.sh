@@ -52,22 +52,18 @@ mv SWV2/* ./ROOT/
 echo "CONFIGUREING...###########################################"
 
 sed -i 's/JENKINS_ARGS="--webroot=\/var\/cache\/$NAME\/war --httpPort=$HTTP_PORT"/JENKINS_ARGS="--webroot=\/var\/cache\/$NAME\/war --httpPort=$HTTP_PORT --prefix=\/jenkins"/' /etc/default/jenkins
-sleep 1s
 
 sed -ie 's/PassengerDefaultRuby \/usr\/bin\/ruby/PassengerDefaultRuby \/usr\/bin\/ruby\nPassengerDefaultUser www-data\nPassengerRuby \/usr\/bin\/ruby/' /etc/apache2/mods-available/passenger.conf
-sleep 2s
 
 sed -ie 's/<\/VirtualHost>/JkMount \/*.jsp tomcat\nJkMount \/*.json tomcat\nJkMount \/*.xml tomcat\nJkMount \/*.do tomcat\nProxyPass \/jenkins http:\/\/127.0.0.1:8080\/jenkins nocanon\nProxyPassReverse \/jenkins http:\/\/127.0.0.1:8080\/jenkins\n<\/VirtualHost>\n<Directory \/var\/lib\/tomcat8\/webapps\/ROOT\/redmine>\nRailsBaseURI \/redmine\nPassengerResolveSymlinksInDocumentRoot on\n<\/Directory>\n<Proxy http:\/\/127.0.0.1:8080.jenkins*>\nOrder deny,allow\nAllow from all\n<\/Proxy>/' /etc/apache2/sites-available/000-default.conf
-sleep 1s
 
 sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/lib\/tomcat8\/webapps\/ROOT/' /etc/apache2/sites-available/000-default.conf
-sleep 2s
 
+echo "fin"
 echo -e "worker.list=tomcat\nworker.tomcat.port=8009\nworker.tomcat.host=localhost\nworker.tomcat.type=ajp13\nworker.tomcat.lbfactor=1" > /etc/apache2/workers.properties
-sleep 1s
 
 sed -i 's/JkWorkersFile \/etc\/libapache2-mod-jk\/workers.properties/JkWorkersFile \/etc\/apache2\/workers.properties/' /etc/apache2/mods-available/jk.conf
-sleep 1s
+echo "fin"
 echo -e "<Directory /var/lib/tomcat8/webapps/ROOT/>\nOptions FollowSymLinks\nAllowOverride None\nRequire all granted\n</Directory>" >> /etc/apache2/apache2.conf
 
 sed -i 's/<Connector port="8080"/<Connector port="8081"/' /etc/tomcat8/server.xml
