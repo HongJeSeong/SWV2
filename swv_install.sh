@@ -9,20 +9,20 @@ sudo wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-ke
 sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
 #jenkins
 echo "JENKINS INSTALL...###########################################"
-sudo apt-get update && apt-get install -y jenkins && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get update && apt-get install -y jenkins && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #apapche2
 echo "APACHE2 INSTALL...###########################################"
-sudo apt-get install -y apache2 && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get install -y apache2 && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #apache2 passenger
 echo "APACHE2 PASSENGER INSTALL...###########################################"
-sudo apt-get install -y libapache2-mod-passenger && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get install -y libapache2-mod-passenger && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #php mysql redmine redmine mysql
 echo "PHP MYSQL REDMINE INSTALL...###########################################"
-sudo apt-get install -y php php-mysql mysql-server redmine redmine-mysql ruby-dev && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get install -y php php-mysql mysql-server redmine redmine-mysql ruby-dev && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #gem bundler
 echo "GEM BUNDLER INSTALL...###########################################"
 gem update
-gem install bundler && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+gem install bundler && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 touch /usr/share/redmine/Gemfile.lock
 chown -R www-data:www-data /usr/share/redmine/ #setting permission
 chmod -R 755 /usr/share/redmine/
@@ -31,17 +31,17 @@ sudo a2enmod proxy_http
 sudo a2enmod ssl
 #tomcat
 echo "TOMCAT INSTALL...###########################################"
-sudo apt-get install -y libapache2-mod-jk tomcat8 && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get install -y libapache2-mod-jk tomcat8 && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #redmine linking
 echo "REDMINE LINKING...###########################################"
 ln -s /usr/share/redmine/public /var/lib/tomcat8/webapps/ROOT/redmine
 #myslq java
 echo "MYSQL JAVA INSTALL...###########################################"
-sudo apt-get install -y libmysql-java && echo "COMPLETE###########################################" || echo "FAIL###########################################"
-ln -s /usr/share/java/mysql-connector-java.jar /usr/share/tomcat8/lib/mysql-connector-java.jar && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get install -y libmysql-java && echo "###########################################COMPLETE" || echo "###########################################FAIL"
+ln -s /usr/share/java/mysql-connector-java.jar /usr/share/tomcat8/lib/mysql-connector-java.jar && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #git
 echo "GIT INSTALL...###########################################"
-sudo apt-get install -y git && echo "COMPLETE###########################################" || echo "FAIL###########################################"
+sudo apt-get install -y git && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 cd /var/lib/tomcat8/webapps
 git clone https://github.com/HongJeSeong/SWV2.git
 mv SWV2/* ./ROOT/
