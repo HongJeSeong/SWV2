@@ -140,13 +140,13 @@ sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/lib\/tomcat8\/webapp
 
 echo -e "worker.list=tomcat\nworker.tomcat.port=8009\nworker.tomcat.host=localhost\nworker.tomcat.type=ajp13\nworker.tomcat.lbfactor=1" > /etc/apache2/workers.properties
 
-sed -i 's/JKWokersFile \/etc\/libapache2-mod-jk\/wokers.properties/JKWorkersFile \/etc\/apache2\/workers.properties/' /etc/apache2/mods-available/jk.conf
+sed -i 's/JKWokersFile \/etc\/libapache2-mod-jk\/workers.properties/JKWorkersFile \/etc\/apache2\/workers.properties/' /etc/apache2/mods-available/jk.conf
 
 echo -e "<Directory /var/lib/tomcat8/webapps/ROOT/>\nOptions FollowSymLinks\nAllowOverride None\nRequire all granted\n</Directory>" >> /etc/apache2/apache2.conf
 
 sed -i 's/<Connector port="8080"/<Connector port="8081"/' /etc/tomcat8/server.xml
 
-sed -ie 's/<Engine name="Catalina" defaultHost="localhost">/<Connerctor port="8009" protocol="AJP\/1.3" redirectPort="8443"\/>\n<Engine name="Catalina" defaultHost="localhost">/' /etc/tomcat8/server.xml
+sed -ie 's/<Engine name="Catalina" defaultHost="localhost">/<Connector port="8009" protocol="AJP\/1.3" redirectPort="8443"\/>\n<Engine name="Catalina" defaultHost="localhost">/' /etc/tomcat8/server.xml
 
 echo "RESTARTING...###########################################"
 service apache2 restart
