@@ -59,12 +59,13 @@ sed -ie 's/<\/VirtualHost>/JkMount \/*.jsp tomcat\nJkMount \/*.json tomcat\nJkMo
 
 sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/lib\/tomcat8\/webapps\/ROOT/' /etc/apache2/sites-available/000-default.conf
 
-echo "fin"
 echo -e "worker.list=tomcat\nworker.tomcat.port=8009\nworker.tomcat.host=localhost\nworker.tomcat.type=ajp13\nworker.tomcat.lbfactor=1" > /etc/apache2/workers.properties
+sed -i 's/-e worker.list=tomcat/worker.list=tomcat/' /etc/apache2/workers.properties
 
 sed -i 's/JkWorkersFile \/etc\/libapache2-mod-jk\/workers.properties/JkWorkersFile \/etc\/apache2\/workers.properties/' /etc/apache2/mods-available/jk.conf
-echo "fin"
+
 echo -e "<Directory /var/lib/tomcat8/webapps/ROOT/>\nOptions FollowSymLinks\nAllowOverride None\nRequire all granted\n</Directory>" >> /etc/apache2/apache2.conf
+sed -i 's/-e <Directory/<Directory/' /etc/apache2/apache2.conf
 
 sed -i 's/<Connector port="8080"/<Connector port="8081"/' /etc/tomcat8/server.xml
 
