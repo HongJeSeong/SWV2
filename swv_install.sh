@@ -49,7 +49,7 @@ mv SWV2/* ./ROOT/
 
 
 #configure
-echo "CONFIGUREING...###########################################"
+echo "CONFIGURING...###########################################"
 
 sed -i 's/JENKINS_ARGS="--webroot=\/var\/cache\/$NAME\/war --httpPort=$HTTP_PORT"/JENKINS_ARGS="--webroot=\/var\/cache\/$NAME\/war --httpPort=$HTTP_PORT --prefix=\/jenkins"/' /etc/default/jenkins
 
