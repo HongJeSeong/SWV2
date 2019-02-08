@@ -46,7 +46,12 @@ cd /var/lib/tomcat8/webapps
 sudo git clone https://github.com/HongJeSeong/SWV2.git
 sudo mv SWV2/* ./ROOT/
 
-
+#tomcat conf linking
+cd /usr/share/tomcat8
+ln -s /var/lib/tomcat8/conf conf
+ln -s /etc/tomcat8/policy.d/03catalina.policy conf/catalina.policy
+ln -s /var/log/tomcat8/ log
+chmod -R 777 /usr/share/tomcat8/conf
 
 #configure
 echo "CONFIGURING...###########################################"
