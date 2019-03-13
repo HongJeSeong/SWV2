@@ -6,7 +6,7 @@
 	<title>SWV</title>
 </head>
 
-<frameset rows="40px,*" frameborder="0" border="0">
+<frameset rows="50px,*" frameborder="0" border="0">
 	<frame src="main_top.jsp" noresize scrolling="no"></frame>
 	<frame src="/redmine" name="main_bottom"></frame>
 </frameset>
