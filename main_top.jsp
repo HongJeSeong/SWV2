@@ -1,9 +1,14 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
 <!DOCTYPE html>
 <html>
 
 <head>
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
 	<style>
+	*{margin: 0; padding: 0;}
+
 	body {
 		margin:0px;
 		background-color:black;
@@ -25,15 +30,45 @@
 		color:white;
 		text-decoration:none;
 	}
+	.d1 ul li {
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+  }
+  .d1 ul ul{
+    position: absolute;
+    display: none;
+  }
+  .d1 ul ul li {
+    display: block;
+  }
+
 	</style>
 </head>
 
 <body>
-
 	<table width="100%" height="100%">
 		<tr>
 			<td width="200" align="center"><b>SElab SP</b></td>
-			<td></td>
+			<td>
+				<div class="d1">
+				   <ul>
+				      <li><a href="#" id="current">Guide</a>
+				         <ul>
+				           <li><a href="web/guide_common.html">Common</a></li>
+				           <li><a href="web/guide_home.html">Home</a></li>
+				           <li><a href="web/guide_car.html">Car</a></li>
+				           <li><a href="web/guide_air.html">Air</a></li>
+									 <li><a href="web/guide_bigdata.html">BigData</a></li>
+									 <li><a href="web/guide_medical.html">Medical</a></li>
+									 <li><a href="web/guide_mobile.html">Mobile</a></li>
+									 <li><a href="web/guide_secure.html">Secure</a></li>
+									 <li><a href="web/guide_smartgrid.html">SmartGrid</a></li>
+				         </ul>
+				      </li>
+				   </ul>
+				</div>
+			</td>
 			<td width="190">
 				<a href="/redmine" target="main_bottom">Project Management</a>
 			</td>
@@ -55,6 +90,11 @@
 		</tr>
 	</table>
 
+	<script type="text/javascript">
+     $(".d1 ul li").hover(function() {
+       $(this).find("ul").stop().fadeToggle(500);
+     });
+   </script>
 
 </body>
 
