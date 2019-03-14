@@ -1,4 +1,7 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+
 <!DOCTYPE html>
 <html>
 
@@ -38,7 +41,7 @@
                 <tr>
                         <td width="200" align="center"><b>SElab SP</b></td>
                         <td>
-                                   <a href="#" id="current" onclick="showPopup('web/guides.html')">Guide</a>
+                                   <a href="#" id="current" onclick="showPopup('web/guides.html')">가이드</a>
                         </td>
                         <td width="190">
                                 <a href="/redmine" target="main_bottom">Project Management</a>
@@ -47,14 +50,16 @@
                                 <a href="/jenkins" target="main_bottom">Continuous Integration</a>
                         </td>
                         <td width="130">
-                                <a href="dashboard.jsp" target="main_bottom">Dashboard</a>
+                                <a href="dashboard.jsp" target="main_bottom">SW건전성 관리</a>
                         </td>
                         <td width="170">
-                                <a href="setTraceability.html" target="main_bottom">Traceability Setting</a>
+                                <!--<a href="setTraceability.html" target="main_bottom">Traceability Setting</a>-->
+                                <a href="develop.jsp" target="main_bottom">개발진행 현황</a>
                         </td>
-                        <td width="170">
+<!--                    <td width="170">
                                 <a href="TraceabilityViewerMain.html" target="main_bottom">Traceability Viewer</a>
                         </td>
+-->
                         <td width="100">
                                 <a href="logout.jsp" target="_parent">Logout</a>
                         </td>
