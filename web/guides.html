@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>User Guide</title>
+<title>유저 가이드</title>
 <style>
   .table-head{
     border-top: 1px solid #000000;
@@ -42,17 +42,17 @@
 
   </style>
   <body>
-	  <div class="guide-select">
-		<input type="radio" name="chk_info" value="common" checked="checked" onclick="OnOff(this.value)">Common
-		<input type="radio" name="chk_info" value="home" onclick="OnOff(this.value)">Home
-		<input type="radio" name="chk_info" value="medical" onclick="OnOff(this.value)">Medical
-		<input type="radio" name="chk_info" value="mobile" onclick="OnOff(this.value)">Mobile
-		<input type="radio" name="chk_info" value="secure" onclick="OnOff(this.value)">Secure
-		<input type="radio" name="chk_info" value="smartgrid" onclick="OnOff(this.value)">Smartgrid
-		<input type="radio" name="chk_info" value="air" onclick="OnOff(this.value)">Air
-		<input type="radio" name="chk_info" value="bigdata" onclick="OnOff(this.value)">BigData
-		<input type="radio" name="chk_info" value="car" onclick="OnOff(this.value)">Car
-	  </div>
+          <div class="guide-select">
+                <input type="radio" name="chk_info" value="common" checked="checked" onclick="OnOff(this.value)">일반
+                <input type="radio" name="chk_info" value="home" onclick="OnOff(this.value)">홈네트워크
+                <input type="radio" name="chk_info" value="medical" onclick="OnOff(this.value)">의료기기
+                <input type="radio" name="chk_info" value="mobile" onclick="OnOff(this.value)">차세대이동통신
+                <input type="radio" name="chk_info" value="secure" onclick="OnOff(this.value)">지식정보보안
+                <input type="radio" name="chk_info" value="smartgrid" onclick="OnOff(this.value)">스마트그리드
+                <input type="radio" name="chk_info" value="air" onclick="OnOff(this.value)">항공
+                <input type="radio" name="chk_info" value="bigdata" onclick="OnOff(this.value)">빅데이터
+                <input type="radio" name="chk_info" value="car" onclick="OnOff(this.value)">자동차
+          </div>
   <div id="common">
   <h1 align=center>User Guide [일반]</h1>
 
@@ -167,7 +167,7 @@
 </table>
   </div>
   <div id="home" style="display:none">
-	  <h1 align=center>User Guide [홈네트워크]</h1>
+          <h1 align=center>User Guide [홈네트워크]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -311,7 +311,7 @@
 </table>
   </div>
 <div id="medical" style="display:none">
-	<h1 align=center>User Guide [의료기기]</h1>
+        <h1 align=center>User Guide [의료기기]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -435,7 +435,7 @@
 </div>
 
 <div id="mobile" style="display:none">
-	 <h1 align=center>User Guide [차세대이동통신]</h1>
+         <h1 align=center>User Guide [차세대이동통신]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -558,7 +558,7 @@
 </table>
 </div>
 <div id="secure" style="display:none">
-	<h1 align=center>User Guide [지식정보보안]</h1>
+        <h1 align=center>User Guide [지식정보보안]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -703,7 +703,7 @@
 
 </div>
 <div id="smartgrid" style="display:none">
-	<h1 align=center>User Guide [스마트그리드]</h1>
+        <h1 align=center>User Guide [스마트그리드]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -849,7 +849,7 @@
 </table>
 </div>
 <div id="air" style="display:none">
-	<h1 align=center>User Guide [항공]</h1>
+        <h1 align=center>User Guide [항공]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -991,7 +991,7 @@
 </div>
 
 <div id="bigdata" style="display:none">
-	<h1 align=center>User Guide [빅데이터]</h1>
+        <h1 align=center>User Guide [빅데이터]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -1125,7 +1125,7 @@
 </div>
 
 <div id="car" style="display:none">
-	<h1 align=center>User Guide [자동차]</h1>
+        <h1 align=center>User Guide [자동차]</h1>
 
 <table class="table-head">
   <tr class="table-row color-back">
@@ -1277,9 +1277,9 @@
 </table>
 </div>
 
-	<script>
-		function OnOff(val){
-			if(val=="common"){
+        <script>
+                function OnOff(val){
+                        if(val=="common"){
                                 document.getElementById("common").style.display="";
                                 document.getElementById("home").style.display="none";
                                 document.getElementById("medical").style.display="none";
@@ -1350,7 +1350,7 @@
                                 document.getElementById("bigdata").style.display="none";
                                 document.getElementById("car").style.display="none";
                         }else if(val=="bigdata"){
-				document.getElementById("bigdata").style.display="";
+                                document.getElementById("bigdata").style.display="";
                                 document.getElementById("common").style.display="none";
                                 document.getElementById("medical").style.display="none";
                                 document.getElementById("mobile").style.display="none";
@@ -1370,8 +1370,8 @@
                                 document.getElementById("bigdata").style.display="none";
                                 document.getElementById("home").style.display="none";
                         }
-		
-		}
-	</script>
+
+                }
+        </script>
   </body>
  </html>
