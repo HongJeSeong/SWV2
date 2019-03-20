@@ -29,6 +29,9 @@ chmod -R 755 /usr/share/redmine/
 sudo a2enmod proxy
 sudo a2enmod proxy_http
 sudo a2enmod ssl
+#xvbf
+echo "TOMCAT INSTALL...###########################################"
+sudo apt-get install -y xvbf && echo "###########################################COMPLETE" || echo "###########################################FAIL"
 #tomcat
 echo "TOMCAT INSTALL...###########################################"
 sudo apt-get install -y libapache2-mod-jk tomcat8 && echo "###########################################COMPLETE" || echo "###########################################FAIL"
