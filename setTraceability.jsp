@@ -137,8 +137,8 @@
 
                         try{
                                 String url = "jdbc:mysql://localhost:3307/redmine";
-                                String id = "id";
-                                String pw = "passwd";
+                                String id = "root";
+                                String pw = "409264";
                                 Class.forName("com.mysql.jdbc.Driver");
                                 conn=DriverManager.getConnection(url,id,pw);
                                 out.println("connect");
@@ -147,13 +147,14 @@
                                 String output= "";
                                 pstmt = conn.prepareStatement(sql);
                                 ResultSet rs = pstmt.executeQuery();
+                                String name ="";
 
                         while(rs.next()){
-                                String id=rs.getString("id");
-                                String name=rs.getString("name");
+                                id=rs.getString("id");
+                                name=rs.getString("name");
                                 output+="<option value="+id+">"+name+"</option>";
                         }
-                                out.println(ouput);
+                                out.println(output);
                                 conn.close();
                                 pstmt.close();
 
