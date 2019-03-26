@@ -146,7 +146,7 @@
                                 String sql = "select id,name FROM projects;";
                                 String output= "";
                                 pstmt = conn.prepareStatement(sql);
-                                rs = pstmt.executeQuery();
+                                int rs = pstmt.executeQuery();
 
                         while(rs.next()){
                                 String id=rs.getString("id");
@@ -154,6 +154,8 @@
                                 output+="<option value="+id+">"+name+"</option>";
                         }
                                 out.println(ouput);
+                                conn.close();
+                                pstmt.close();
 
                         }catch(Exception e)
                         {
