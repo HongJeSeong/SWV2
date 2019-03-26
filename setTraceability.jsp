@@ -146,7 +146,7 @@
                                 String sql = "select id,name FROM projects;";
                                 String output= "";
                                 pstmt = conn.prepareStatement(sql);
-                                int rs = pstmt.executeQuery();
+                                ResultSet rs = pstmt.executeQuery();
 
                         while(rs.next()){
                                 String id=rs.getString("id");
