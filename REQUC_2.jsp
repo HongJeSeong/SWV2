@@ -94,7 +94,7 @@
                         }
                         Collections.sort(name_req);
                         Collections.sort(name_uc);
-                        out.println("<form action='ReqUCModify.php?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
+                        out.println("<form action='ReqUCModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
                         String from="";
                         String to="";
                         for(int i=0; i<=value_count;i++){
