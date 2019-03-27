@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Layer Bands using a Background Part</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <meta name="description" content="Showing bands for the layers in a diagram." />
+<!-- Copyright 1998-2018 by Northwoods Software Corporation. -->
+        <meta charset="UTF-8">
+        <style type="text/css">
+            input[type=submit]{
+                padding: 7px 20px 7px 20px;
+                text-align: center;
+                font-size: 15px;
+                border-radius: 5px;
+            }
+            input[type=submit]:hover{
+                cursor: pointer;
+                background: linear-gradient(#333333 5%, #777777 100%);
+                color: #ffffff;
+            }
+            .tooltip-inner{
+                max-width: 500px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="sample" align="center">
+            <?php
+                $proj_name = $_GET['proj_name'];
+
+                $db = mysqli_connect("localhost:3307", "root", "ssssssss", "redmine");
+                $traceability_db = mysqli_connect("localhost:3307", "root", "ssssssss", "traceability");
+
+                mysqli_query($traceability_db, "DELETE FROM artifacts_info WHERE project_id=".$proj_name." and artifact_name like 'OB%';");
+                mysqli_query($traceability_db, "DELETE FROM artifacts_info WHERE project_id=".$proj_name." and artifact_name like 'MD%';");
+
+                $result = mysqli_query($db, "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id=".$proj_name." and a.id=b.customized_id and b.value LIKE 'OB%';");
+
+                while($row111 = mysqli_fetch_array($result)){
+                    $prj_id = $row111["project_id"];
+                    $id = $row111["customized_id"];
+                    $value = $row111["value"];
+                    //echo $prj_id.", ".$id.", ".$value."<br>";
+                    mysqli_query($traceability_db, "INSERT INTO artifacts_info VALUES (NULL, ".$prj_id.", ".$id.", '".$value."');");
+                }
+
+                $result = mysqli_query($db, "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id=".$proj_name." and a.id=b.customized_id and b.value LIKE 'MD%';");
+
+                while($row111 = mysqli_fetch_array($result)){
+                    $prj_id = $row111["project_id"];
+                    $id = $row111["customized_id"];
+                    $value = $row111["value"];
+                    //echo $prj_id.", ".$id.", ".$value."<br>";
+                    mysqli_query($traceability_db, "INSERT INTO artifacts_info VALUES (NULL, ".$prj_id.", ".$id.", '".$value."');");
+                }
+            ?>
+            <?php
+                $value_count = 0;
+                $value_count2 = 0;
+
+                $ob = mysqli_query($traceability_db, "SELECT artifact_name FROM artifacts_info WHERE project_id = ".$proj_name." and artifact_name LIKE 'OB%';");
+                while($artifact_name = mysqli_fetch_array($ob)){
+                    $name_ob[$value_count] = $artifact_name["artifact_name"];
+                    $value_count++;
+                }
+                $md = mysqli_query($traceability_db, "SELECT artifact_name FROM artifacts_info WHERE project_id = ".$proj_name." and artifact_name LIKE 'MD%';");
+                while($artifact_name = mysqli_fetch_array($md)){
+                    $name_md[$value_count2] = $artifact_name["artifact_name"];
+                    $value_count2++;
+                }
+                sort($name_ob);
+                sort($name_md);
+            ?>
+            <?php
+            echo "<form action='OBMDModify.php?proj_name=".$proj_name."' method='post'>";
+            echo "<table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>";
+                for($j=0;$j<=$value_count;$j++){
+                    echo "<tr>";
+                    for($k=0;$k<=$value_count2;$k++){
+                        if($j==0&&$k==0){
+                            echo "<td></td>";
+                        }else if($j!==0&&$k==0){
+                            echo "<td>".$name_ob[$j-1]."</td>";
+                        }else if($j==0&&$k!==0){
+                            echo "<td>".$name_md[$k-1]."</td>";
+                        }else{
+                            $result4 = mysqli_query($traceability_db, "SELECT artifact_id FROM artifacts_info WHERE artifact_name ='".$name_ob[$j-1]."' and project_id=".$proj_name.";");
+                            while($row4 = mysqli_fetch_array($result4)){
+                                $from = $row4["artifact_id"];
+                            }
+                            $result6 = mysqli_query($traceability_db, "SELECT artifact_id FROM artifacts_info WHERE artifact_name ='".$name_md[$k-1]."' and project_id=".$proj_name.";");
+                            while($row6 = mysqli_fetch_array($result6)){
+                                $to = $row6["artifact_id"];
+                            }
+                            $result5 = mysqli_query($traceability_db, "SELECT EXISTS (SELECT * FROM relation_status WHERE from_id='".$from."' and to_id='".$to."') as success;");
+                            $fromto = $from.":".$to;
+                            while($row5 = mysqli_fetch_array($result5)){
+                                if($row5["success"]==1){
+                                    echo "<td align='center' class='hover' id='$fromto'>O</td>";
+                                }else {
+                                    echo "<td align='center' class='hover' id='$fromto'></td>";
+                                }
+                            }
+                        }
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>";
+                echo "<input type='submit' name='submit' value='수정' style=' top: 30px; left: 50px; margin: 0px 0px 0px 0px; position: absolute; '>";
+                echo "</form>";
+            ?>
+            <?php
+
+            ?>
+        </div>
+    </body>
+</html>
+
+<script>
+    $(document).ready(function(){
+
+        $('.hover').tooltip({
+            title: fetchData,
+            html: true,
+            placement: 'right'
+        });
+
+        function fetchData(){
+            var fetch_data = '';
+            var element = $(this);
+            var id = element.attr("id");
+            $.ajax({
+                url:"fetch.php",
+                method:"POST",
+                async: false,
+                data:{id:id},
+                success:function(data){
+                    fetch_data = data;
+                }
+            });
+        return fetch_data;
+        }
+    });
+</script>
