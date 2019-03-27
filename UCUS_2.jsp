@@ -26,8 +26,8 @@
         </style>
     </head>
     <body>
-        <div align="center">
-                <%@ page import = "java.sql.*" %>
+	<div align="center">
+		<%@ page import = "java.sql.*" %>
                 <%@ page import = "java.util.Collections" %>
                 <%@ page import = "java.util.ArrayList" %>
                         <%
@@ -81,18 +81,18 @@
                         pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'UC%';");
                         rs = pstmtTrace.executeQuery();
                         while(rs.next()){
-                                name_req.add(rs.getString("artifact_name"));
+                                name_uc.add(rs.getString("artifact_name"));
                                 value_count++;
                         }
                         pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'US%';");
                         rs = pstmtTrace.executeQuery();
                         while(rs.next()){
-                                name_uc.add(rs.getString("artifact_name"));
+                                name_us.add(rs.getString("artifact_name"));
                                 value_count2++;
                         }
                         Collections.sort(name_uc);
                         Collections.sort(name_us);
-                        out.println("<form action='ReqUCModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
+                        out.println("<form action='UCUSModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
                         String from="";
                         String to="";
                         for(int i=0; i<=value_count;i++){
@@ -101,9 +101,9 @@
                                         if(i==0&&j==0){
                                                 out.println("<td></td>");
                                         }else if(i!=0&&j==0){
-                                                out.println("<td>"+name_req.get(i-1)+"</td>");
+                                                out.println("<td>"+name_uc.get(i-1)+"</td>");
                                         }else if(i==0&&j!=0){
-                                                out.println("<td>"+name_uc.get(j-1)+"</td>");
+                                                out.println("<td>"+name_us.get(j-1)+"</td>");
                                         }else{
                                                 pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_uc.get(i-1)+"' and project_id="+proj_name+";");
                                                 rs = pstmtTrace.executeQuery();

@@ -28,6 +28,7 @@
                 vertical-align: middle;
                 padding: 0px 5px 6px 0px;
             }
+
             #div_root{
                 margin:auto;
                 width:1200px;
@@ -67,12 +68,14 @@
                 var e = document.getElementById("project");
                 var val = e.options[e.selectedIndex].value;
                 var txt = e.options[e.selectedIndex].text;
+
                 var divId = document.getElementById("block");
                 var divId2 = document.getElementById("nics");
                 var divId3 = document.getElementById("building");
                 divId.style.display="none";
                 divId2.style.display="none";
                 divId3.style.display="none";
+
                 if(val == 5){
                     divId3.style.display="block";
                 }else if(val == 6){
@@ -81,6 +84,7 @@
                     divId2.style.display="block";
                 }
                 return val;
+
             }
             function toSFRSBM(){
                 var val = getBoxValue();
@@ -126,35 +130,39 @@
             <div id="div_menu">
                 <div>
                     <select id="project">
-                        <%@ page import = "java.sql.*" %>
-                        <%
-                        Connection conn = null;
-                        PreparedStatement pstmt = null;
-                        try{
-                                String url = "jdbc:mysql://localhost:3307/redmine";
-                                String id = "***";
-                                String pw = "***";
-                                Class.forName("com.mysql.jdbc.Driver");
-                                conn=DriverManager.getConnection(url,id,pw);
-                                out.println("connect");
-                                String sql = "select id,name FROM projects;";
-                                String output= "";
-                                pstmt = conn.prepareStatement(sql);
-                                ResultSet rs = pstmt.executeQuery();
-                                String name ="";
-                        while(rs.next()){
-                                id=rs.getString("id");
-                                name=rs.getString("name");
-                                output+="<option value="+id+">"+name+"</option>";
-                        }
-                                out.println(output);
-                                conn.close();
-                                pstmt.close();
-                        }catch(Exception e)
-                        {
-                                e.printStackTrace();
-                        }
-                        %>
+			<%@ page import = "java.sql.*" %> 
+			<%  
+			Connection conn = null; 
+			PreparedStatement pstmt = null;
+
+			try{
+				String url = "jdbc:mysql://localhost:3307/redmine";
+				String id = "root";
+				String pw = "409264";
+				Class.forName("com.mysql.jdbc.Driver");
+				conn=DriverManager.getConnection(url,id,pw);
+				out.println("connect");
+
+				String sql = "select id,name FROM projects;";
+				String output= "";
+				pstmt = conn.prepareStatement(sql);
+				ResultSet rs = pstmt.executeQuery();
+				String name ="";
+			
+			while(rs.next()){
+				id=rs.getString("id");
+				name=rs.getString("name");
+				output+="<option value="+id+">"+name+"</option>";
+			}
+				out.println(output);
+				conn.close();
+				pstmt.close();
+
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			%>
                     </select>
                     <input type="button" value="조회" onclick="javascript:getBoxValue();" />
                 </div>

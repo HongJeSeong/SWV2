@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-
 <!DOCTYPE html>
 <html>
     <head>
@@ -34,13 +33,10 @@
                         <%
                         request.setCharacterEncoding("UTF-8");
                         String proj_name=request.getParameter("proj_name");
-
                         Connection connDB = null;
                         Connection connTrace = null;
-
                         PreparedStatement pstmtDB = null;
                         PreparedStatement pstmtTrace = null;
-
                         try{
                                 String urlDB = "jdbc:mysql://localhost:3307/redmine";
                                 String urlTrace="jdbc:mysql://localhost:3307/traceability";
@@ -50,23 +46,18 @@
                                 Class.forName("com.mysql.jdbc.Driver");
                                 connDB=DriverManager.getConnection(urlDB,id,pw);
                                 connTrace=DriverManager.getConnection(urlTrace,id,pw);
-
-                                String sql1 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'OB%';";
-                                String sql2 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'MD%';";
-                                String sql3 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'OB%';";
-                                String sql4 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'MD%';";
+                                String sql1 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'UT%';";
+                                String sql2 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'TT%';";
+                                String sql3 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'UT%';";
+                                String sql4 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'TT%';";
                                 pstmtTrace = connTrace.prepareStatement(sql1);
                                 pstmtTrace.executeQuery();
                                 pstmtTrace = connTrace.prepareStatement(sql2);
                                 pstmtTrace.executeQuery();
-
                                 pstmtDB = connDB.prepareStatement(sql3);
                                 rs = pstmtDB.executeQuery();
-
                                 String project_id="";
                                 String value ="";
-
-
                         while(rs.next()){
                                 project_id=rs.getString("project_id");
                                 id=rs.getString("customized_id");
@@ -74,10 +65,8 @@
                                 pstmtTrace = connTrace.prepareStatement("INSERT INTO artifacts_info VALUES (NULL, "+project_id+", "+id+", '"+value+"');");
                                 pstmtTrace.executeQuery();
                         }
-
                                 pstmtDB = connDB.prepareStatement(sql4);
                                 rs = pstmtDB.executeQuery();
-
                         while(rs.next()){
                                 project_id=rs.getString("project_id");
                                 id=rs.getString("customized_id");
@@ -85,51 +74,43 @@
                                 pstmtTrace = connTrace.prepareStatement("INSERT INTO artifacts_info VALUES (NULL, "+project_id+", "+id+", '"+value+"');");
                                 pstmtTrace.executeQuery();
                         }
-
-
                         int value_count = 0;
                         int value_count2 = 0;
-                        ArrayList<String> name_ob = new ArrayList<String>();
-                        ArrayList<String> name_md = new ArrayList<String>();
-
-                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'OB%';");
-
+                        ArrayList<String> name_ut = new ArrayList<String>();
+                        ArrayList<String> name_tt = new ArrayList<String>();
+                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'UT%';");
                         rs = pstmtTrace.executeQuery();
-
                         while(rs.next()){
-                                name_ob.add(rs.getString("artifact_name"));
+                                name_ut.add(rs.getString("artifact_name"));
                                 value_count++;
                         }
-                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'MD%';");
+                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'TT%';");
                         rs = pstmtTrace.executeQuery();
                         while(rs.next()){
-                                name_md.add(rs.getString("artifact_name"));
+                                name_tt.add(rs.getString("artifact_name"));
                                 value_count2++;
                         }
-                        Collections.sort(name_ob);
-                        Collections.sort(name_md);
-
-
-                        out.println("<form action='UCUSModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
+                        Collections.sort(name_ut);
+                        Collections.sort(name_tt);
+                        out.println("<form action='UTTTModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
                         String from="";
                         String to="";
-
                         for(int i=0; i<=value_count;i++){
                                 out.println("<tr>");
                                 for(int j=0;j<=value_count2; j++){
                                         if(i==0&&j==0){
                                                 out.println("<td></td>");
                                         }else if(i!=0&&j==0){
-                                                out.println("<td>"+name_ob.get(i-1)+"</td>");
+                                                out.println("<td>"+name_ut.get(i-1)+"</td>");
                                         }else if(i==0&&j!=0){
-                                                out.println("<td>"+name_md.get(j-1)+"</td>");
+                                                out.println("<td>"+name_tt.get(j-1)+"</td>");
                                         }else{
-                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_ob.get(i-1)+"' and project_id="+proj_name+";");
+                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_ut.get(i-1)+"' and project_id="+proj_name+";");
                                                 rs = pstmtTrace.executeQuery();
                                                 while(rs.next()){
                                                         from=rs.getString("artifact_id");
                                                 }
-                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_md.get(j-1)+"' and project_id="+proj_name+";");
+                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_tt.get(j-1)+"' and project_id="+proj_name+";");
                                                 rs = pstmtTrace.executeQuery();
                                                 while(rs.next()){
                                                         to=rs.getString("artifact_id");
@@ -144,9 +125,6 @@
                                                         out.println("<td align='center' class='hover' id="+fromto+"></td>");
                                                         }
                                                 }
-
-
-
                                         }
                            }
                         out.println("</tr>");
@@ -154,7 +132,6 @@
                         out.println("</table>");
                         out.println("<input type='submit' name='submit' value='수정' style=' top: 30px; left: 50px; margin: 0px 0px 0px 0px; position: absolute; '>");
                         out.println("</form>");
-
                         }catch(Exception e)
                         {
                                 e.printStackTrace();

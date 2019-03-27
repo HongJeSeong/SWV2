@@ -27,8 +27,8 @@
         </style>
     </head>
     <body>
-	<div id="sample" align="center">
-		<%@ page import = "java.sql.*" %>
+        <div id="sample" align="center">
+                <%@ page import = "java.sql.*" %>
                 <%@ page import = "java.util.Collections" %>
                 <%@ page import = "java.util.ArrayList" %>
                         <%
@@ -51,10 +51,10 @@
                                 connDB=DriverManager.getConnection(urlDB,id,pw);
                                 connTrace=DriverManager.getConnection(urlTrace,id,pw);
 
-                                String sql1 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'OB%';";
-                                String sql2 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'MD%';";
-                                String sql3 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'OB%';";
-                                String sql4 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'MD%';";
+                                String sql1 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and (artifact_name LIKE 'SFR%' or artifact_name LIKE 'ITV%' or artifact_name LIKE 'SIR%');";
+                                String sql2 = "DELETE FROM artifacts_info WHERE project_id="+proj_name+" and artifact_name like 'PGM%';";
+                                String sql3 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and (b.value LIKE 'SFR%' or b.value LIKE 'ITV%' or b.value LIKE 'SIR%');";
+                                String sql4 = "SELECT a.project_id, b.customized_id, b.value FROM issues AS a, custom_values AS b WHERE a.project_id="+proj_name+" and a.id=b.customized_id and b.value LIKE 'PGM%';";
                                 pstmtTrace = connTrace.prepareStatement(sql1);
                                 pstmtTrace.executeQuery();
                                 pstmtTrace = connTrace.prepareStatement(sql2);
@@ -89,28 +89,28 @@
 
                         int value_count = 0;
                         int value_count2 = 0;
-                        ArrayList<String> name_ob = new ArrayList<String>();
-                        ArrayList<String> name_md = new ArrayList<String>();
+                        ArrayList<String> name_req = new ArrayList<String>();
+                        ArrayList<String> name_uc = new ArrayList<String>();
 
-                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'OB%';");
+                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and (artifact_name LIKE 'SFR%' or artifact_name LIKE 'ITV%' or artifact_name LIKE 'SIR%');");
 
                         rs = pstmtTrace.executeQuery();
 
                         while(rs.next()){
-                                name_ob.add(rs.getString("artifact_name"));
+                                name_req.add(rs.getString("artifact_name"));
                                 value_count++;
                         }
-                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'MD%';");
+                        pstmtTrace = connTrace.prepareStatement("SELECT artifact_name FROM artifacts_info WHERE project_id = "+proj_name+" and artifact_name LIKE 'PGM%';");
                         rs = pstmtTrace.executeQuery();
                         while(rs.next()){
-                                name_md.add(rs.getString("artifact_name"));
+                                name_uc.add(rs.getString("artifact_name"));
                                 value_count2++;
                         }
-                        Collections.sort(name_ob);
-                        Collections.sort(name_md);
+                        Collections.sort(name_req);
+                        Collections.sort(name_uc);
 
 
-                        out.println("<form action='UCUSModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
+                        out.println("<form action='SFRPGMModify.jsp?proj_name="+proj_name+"' method='post'><table cellpadding='5' cellspacing='0' border='1' style='border-style: solid; border-width: 1px; top: 80px; left: 50px; position: absolute; text-align: center; border-color:black; border-radius: 5px;'>");
                         String from="";
                         String to="";
 
@@ -120,16 +120,16 @@
                                         if(i==0&&j==0){
                                                 out.println("<td></td>");
                                         }else if(i!=0&&j==0){
-                                                out.println("<td>"+name_ob.get(i-1)+"</td>");
+                                                out.println("<td>"+name_req.get(i-1)+"</td>");
                                         }else if(i==0&&j!=0){
-                                                out.println("<td>"+name_md.get(j-1)+"</td>");
+                                                out.println("<td>"+name_uc.get(j-1)+"</td>");
                                         }else{
-                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_ob.get(i-1)+"' and project_id="+proj_name+";");
+                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_req.get(i-1)+"' and project_id="+proj_name+";");
                                                 rs = pstmtTrace.executeQuery();
                                                 while(rs.next()){
                                                         from=rs.getString("artifact_id");
                                                 }
-                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_md.get(j-1)+"' and project_id="+proj_name+";");
+                                                pstmtTrace = connTrace.prepareStatement("SELECT artifact_id FROM artifacts_info WHERE artifact_name ='"+name_uc.get(j-1)+"' and project_id="+proj_name+";");
                                                 rs = pstmtTrace.executeQuery();
                                                 while(rs.next()){
                                                         to=rs.getString("artifact_id");
@@ -190,3 +190,4 @@
         }
     });
 </script>
+
