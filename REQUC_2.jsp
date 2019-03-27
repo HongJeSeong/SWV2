@@ -181,7 +181,7 @@
             var element = $(this);
             var id = element.attr("id");
             $.ajax({
-                url:"fetch.php",
+                url:"fetch.jsp",
                 method:"POST",
                 async: false,
                 data:{id:id},
