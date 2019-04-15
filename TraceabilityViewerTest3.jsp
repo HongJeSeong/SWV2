@@ -90,6 +90,26 @@
           width: 100%;
           height: 100%;
         }
+        .matrix5{
+          border: 1px solid;
+          text-align: center;
+          font-weight: bold;
+          position: relative;
+          overflow: auto;
+          width: 100%;
+          height: 100%;
+        }
+        .matrix6{
+          border: 1px solid;
+          text-align: center;
+          font-weight: bold;
+          position: relative;
+          overflow: auto;
+          width: 100%;
+          height: 100%;
+        }
+
+
         TABLE {
           font-size: 8px;
           margin: auto;
@@ -230,7 +250,7 @@
 
     %>
       <tr>
-        <td width="16.666%" height="100%" colspan="2">
+        <td width="16.666%" height="100%" colspan="1">
           <div class="matrix1"><font style="font-size: 20px">Requirement & Function</font> <br><br>
           <%
           String req_fc="";
