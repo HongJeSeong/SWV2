@@ -7,7 +7,6 @@
     <meta name="description" content="Showing bands for the layers in a diagram." />
     <meta charset="UTF-8">
     <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-    <script src="lib/site/release/go.js"></script>
 
     <style>
         html, body{
@@ -127,13 +126,12 @@
   Connection connDB = null;
   Connection connTrace = null;
 
-  PreparedStatement pstmtDB = null;
   PreparedStatement pstmtTrace = null;
   try{
-          String urlDB = "jdbc:mysql://localhost:3306/redmine_default";
-          String urlTrace="jdbc:mysql://localhost:3306/traceability";
-          String id = "root";
-          String pw = "409264";
+          String urlDB = "";
+          String urlTrace="";
+          String id = "";
+          String pw = "";
           Class.forName("com.mysql.jdbc.Driver");
           connDB=DriverManager.getConnection(urlDB,id,pw);
           connTrace=DriverManager.getConnection(urlTrace,id,pw);
@@ -454,11 +452,11 @@
           out.println("</tr>");
           }
           out.println("</table>");
-                          connDB.close();
+                        connDB.close();
                         connTrace.close();
-                        pstmtDB.close();
                         pstmtTrace.close();
   %>
+
  </div>
       </tr>
       <tr>
@@ -530,22 +528,26 @@
             var array_fcUC = fcUC.split(',');
             var uc = '<%=uc%>';
             var ucUS = '<%=uc_us%>';
-            var array_usOB = usOB.split(',');
-            var ob = '<%=ob%>';
+            var array_ucUS = ucUS.split(',');
+            var us = '<%=us%>';
             var usOB = '<%=us_ob%>';
             var array_usOB = usOB.split(',');
+            var ob = '<%=ob%>';
+            var obMD = '<%=ob_md%>';
+            var array_obMD = obMD.split(',');
             var md = '<%=md%>';
+            var mdSC = '<%=md_sc%>';
+            var array_mdSC = mdSC.split(',');
+            var sc = '<%=sc%>';
 
             var total_id = '<%=total_id%>';
             var total_name = '<%=total_name%>';
-
             //for(var a=0; a<total_name.length; a++){
             //  alert(total_id[a]+total_name[a]);
             //}
 
             var allId = new Array();
             var allName = new Array();
-
             var artifactsClickCount = 0;
 
         function modifyArray(id){
@@ -592,9 +594,22 @@
           }
           else if(fc.includes(id)){
             flag = 2;
-            for(var i=0; i<array_reqUC.length-1; i++){
-              if(array_reqUC[i].includes(":"+id)){
-                relation_back.push(array_reqUC[i].split(":")[0]);
+            for(var i=0; i<array_reqFC.length-1; i++){
+              if(array_reqFC[i].includes(":"+id)){
+                relation_back.push(array_reqFC[i].split(":")[0]);
+              }
+            }
+            for(var i=0; i<array_fcUC.length-1; i++){
+              if(array_fcUC[i].includes(id+":")){
+                relation_for.push(array_fcUC[i].split(":")[1]);
+              }
+            }
+          }
+          else if(uc.includes(id)){
+            flag = 3;
+            for(var i=0; i<array_fcUC.length-1; i++){
+              if(array_fcUC[i].includes(":"+id)){
+                relation_back.push(array_fcUC[i].split(":")[0]);
               }
             }
             for(var i=0; i<array_ucUS.length-1; i++){
@@ -604,7 +619,7 @@
             }
           }
           else if(us.includes(id)){
-            flag = 3;
+            flag = 4;
             for(var i=0; i<array_ucUS.length-1; i++){
               if(array_ucUS[i].includes(":"+id)){
                 relation_back.push(array_ucUS[i].split(":")[0]);
@@ -617,7 +632,7 @@
             }
           }
           else if(ob.includes(id)){
-            flag = 4;
+            flag = 5;
             for(var i=0; i<array_usOB.length-1; i++){
               if(array_usOB[i].includes(":"+id)){
                 relation_back.push(array_usOB[i].split(":")[0]);
@@ -628,16 +643,32 @@
                 relation_for.push(array_obMD[i].split(":")[1]);
               }
             }
+
           }
           else if(md.includes(id)){
-            flag = 5;
+            flag = 6;
             for(var i=0; i<array_obMD.length-1; i++){
               if(array_obMD[i].includes(":"+id)){
                 relation_back.push(array_obMD[i].split(":")[0]);
+              }
+            }
+            for(var i=0; i<array_mdSC.length-1; i++){
+              if(array_mdSC[i].includes(id+":")){
+                relation_for.push(array_mdSC[i].split(":")[1]);
+              }
+            }
+
+          }
+         else if(sc.includes(id)){
+            flag = 7;
+            for(var i=0; i<array_mdSC.length-1; i++){
+              if(array_mcSC[i].includes(":"+id)){
+                relation_back.push(array_mdSC[i].split(":")[0]);
                 relation_for.push("다음 단계 없음");
               }
             }
           }
+
 
           forTrace.deleteRow(1);
           backTrace.deleteRow(1);
