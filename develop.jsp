@@ -217,7 +217,7 @@
                 }
                 output += "<td>" + reqDone + " / " + reqTotal + "</td>";
                 output += "<td>" + "<a href=" + "\"" + "/redmine/projects/" + identifier + "/issues/gantt" + "\"" + "><img width=30 height=30 src=" + "\"" + "gant.png" + "\"" + "/></a>" + "</td>"
-                        + "<td><a href=" + "\"" + "./dashboard.jsp#" +name+ "\"" + "><img width=30 height=30 src=" + "\"" + "visual.png" + "\"" + "</td></tr>";
+                        + "<td><a href=" + "\"" + "./dashboard.jsp?" +name+ "\"" + "><img width=30 height=30 src=" + "\"" + "visual.png" + "\"" + "</td></tr>";
                 out.println();
                 out.println(output);
          }
