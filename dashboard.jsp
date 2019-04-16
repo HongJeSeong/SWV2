@@ -59,6 +59,7 @@ return "None";
   String filePath = request.getRealPath(fileDir) + "/"; //path
   String projPath="";
   String contentPath="";
+  String projName = request.getParameter("name");
 
   File f = new File(filePath);
   File [] files = f.listFiles(); //파일의 리스트를 대입
@@ -66,13 +67,14 @@ return "None";
   for ( int i = 0; i < files.length; i++ ) {
     if(files[i].isDirectory()){ //project directory
         String projDir=files[i].getName();
+        if(projDir.equals(projName)&&projName!=null){
         projPath=filePath+projDir+"/";
         f = new File(projPath);
         File [] buildDir= f.listFiles();
 
         out.println("<h1 id='"+projDir+"' style='text-align:center;color:darkgray'>"+projDir+"</h1>");
         out.println("<table class='table-head' align='center'>");
-                out.println("<tr class='table-row color-back'><th>Build No.</th><th>Visualization</th>");
+        out.println("<tr class='table-row color-back'><th>Build No.</th><th>Visualization</th>");
         Arrays.sort(buildDir,Collections.reverseOrder());
         for( int j=0;j<buildDir.length;j++){
         if(buildDir[j].isDirectory()){//build number directory
@@ -84,10 +86,9 @@ return "None";
                 continue;
         Arrays.sort(contentDir);
         out.println("<tr>");
-                out.println("<td class='index'>" + "<a href='/jenkins/job/"+projDir + "/" + content + "/" + "console'" + ">" + content + "</a></td>");
+        out.println("<td class='index'>" + "<a href='/jenkins/job/"+projDir + "/" + content + "/" + "console'" + ">" + content + "</a></td>");
         out.println("<td style='font-size:16px;'>");
         for(int k = 0; k< contentDir.length;k++){
-
                 String graph = contentDir[k].getName();
                 if(graph.contains(".svg")||graph.contains(".png")||graph.contains(".jpg")){
                 out.println("<a href='dashboard/"+projDir+"/"+content+"/"+graph+"' target='new'>"+naming(graph)+"</a>&nbsp;&nbsp;");
@@ -98,9 +99,16 @@ return "None";
         }
 
         }
-        }
+
         out.println("</table>");
+        break;
+        }
+        }else{
+                out.println("<h1>No Data!</h1>");
+        }
+
   }
 %>
 
 </html>
+
