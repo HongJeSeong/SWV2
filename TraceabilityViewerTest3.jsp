@@ -460,14 +460,14 @@
  </div>
       </tr>
       <tr>
-        <td colspan="5">
+        <td colspan="6">
           <table width="100%" cellpadding='0' cellspacing='0' border='1'>
             <tr>
-              <td width="20%" height="300">
+              <td width="30%" height="300">
                 <div class="artifact_table">
-                  <table width="250" id="artifacts_table" cellspacing="0" cellpadding="0" border="1" style="font-size: 12px;">
+                  <table width="260" id="artifacts_table" cellspacing="0" cellpadding="0" border="1" style="font-size: 12px;">
                     <tr>
-                      <th width="100">관련 산출물</th>
+                      <th width="110">관련 산출물</th>
                     </tr>
                     <tr>
                       <td align="center">선택하세요</td>
@@ -520,35 +520,47 @@
       </tr>
     </table>
     <script type='text/javascript'>
-            var req = '<%=req%>';
+            var req = dataSetting('<%=req%>');
             var reqFC = '<%=req_fc%>';
             var array_reqFC = reqFC.split(',');
-            var fc = '<%=fc%>';
+            var fc = dataSetting('<%=fc%>');
             var fcUC = '<%=fc_uc%>';
             var array_fcUC = fcUC.split(',');
-            var uc = '<%=uc%>';
+            var uc = dataSetting('<%=uc%>');
             var ucUS = '<%=uc_us%>';
             var array_ucUS = ucUS.split(',');
-            var us = '<%=us%>';
+            var us = dataSetting('<%=us%>');
             var usOB = '<%=us_ob%>';
             var array_usOB = usOB.split(',');
-            var ob = '<%=ob%>';
+            var ob = dataSetting('<%=ob%>');
             var obMD = '<%=ob_md%>';
             var array_obMD = obMD.split(',');
-            var md = '<%=md%>';
+            var md = dataSetting('<%=md%>');
             var mdSC = '<%=md_sc%>';
             var array_mdSC = mdSC.split(',');
-            var sc = '<%=sc%>';
+            var sc = dataSetting('<%=sc%>');
+            var total_id=[];
+           <%for(int i=0;i<total_id.size();i++){%>
+           total_id.push("<%= total_id.get(i)%>");
+            <%}%>
 
-            var total_id = '<%=total_id%>';
-            var total_name = '<%=total_name%>';
-            //for(var a=0; a<total_name.length; a++){
-            //  alert(total_id[a]+total_name[a]);
-            //}
+            var total_name=[];
+           <%for(int i=0;i<total_name.size();i++){%>
+           total_name.push("<%= total_name.get(i)%>");
+            <%}%>
 
             var allId = new Array();
             var allName = new Array();
             var artifactsClickCount = 0;
+
+
+        function dataSetting(orgData){
+        var afterData = orgData.replace("[","");
+        afterData = afterData.replace("]","");
+        afterData = afterData.replace(/(\s*)/g,"");
+        afterData = afterData.split(",");
+                return afterData;
+        }
 
         function modifyArray(id){
           var index = total_id.indexOf(id);
@@ -569,119 +581,123 @@
 
             cell.innerHTML = allName[i];
             cell.setAttribute("id", allId[i]);
-            //alert(cellid.id);
           }
+        }
+        function deleteRows(table){
+                while(table.rows.length!=1){
+        for(var i = 1 ;i<table.rows.length;i++){
+                         table.deleteRow(i);
+                }
+         }
+         return table;
+
+        }
+
+        function atomicCheck(cell, id){
+          for(var i =0;i<cell.length;i++){
+                if(cell[i]==id){
+                        return true;
+                 }
+          }
+          return false;
         }
 
         function createAtomicTraceability(id){
           var forTrace = document.getElementById("forward_traceaility");
           var backTrace = document.getElementById("backward_traceaility");
-          var flag = 0;
           var relation_for = new Array();
           var relation_back = new Array();
           // tr 개체를 얻어와 속성값을 조절한다.
-          if(req.includes(id)){
-            flag = 1;
+
+          if(atomicCheck(req, id)){
             for(var i=0; i<array_reqFC.length-1; i++){
-              if(array_reqFC[i].includes(id+":")){
+              if(array_reqFC[i].split(":")[0]==id){
                 relation_for.push(array_reqFC[i].split(":")[1]);
                 relation_back.push("이전 단계 없음");
               }
             }
-            //for(var i=0; i<relation_for.length; i++){
-            //  console.log("result["+i+"] "+relation_for[i]);
-            //}
           }
-          else if(fc.includes(id)){
-            flag = 2;
+          else if(atomicCheck(fc, id)){
             for(var i=0; i<array_reqFC.length-1; i++){
-              if(array_reqFC[i].includes(":"+id)){
+              if(array_reqFC[i].split(":")[1]==id){
                 relation_back.push(array_reqFC[i].split(":")[0]);
               }
+
             }
             for(var i=0; i<array_fcUC.length-1; i++){
-              if(array_fcUC[i].includes(id+":")){
+                if(array_fcUC[i].split(":")[0]==id){
                 relation_for.push(array_fcUC[i].split(":")[1]);
               }
             }
           }
-          else if(uc.includes(id)){
-            flag = 3;
+          else if(atomicCheck(uc, id)){
             for(var i=0; i<array_fcUC.length-1; i++){
-              if(array_fcUC[i].includes(":"+id)){
+              if(array_fcUC[i].split(":")[1]==id){
                 relation_back.push(array_fcUC[i].split(":")[0]);
               }
             }
             for(var i=0; i<array_ucUS.length-1; i++){
-              if(array_ucUS[i].includes(id+":")){
+              if(array_ucUS[i].split(":")[0]==id){
                 relation_for.push(array_ucUS[i].split(":")[1]);
               }
             }
           }
-          else if(us.includes(id)){
-            flag = 4;
+          else if(atomicCheck(us, id)){
             for(var i=0; i<array_ucUS.length-1; i++){
-              if(array_ucUS[i].includes(":"+id)){
+              if(array_ucUS[i].split(":")[1]==id){
                 relation_back.push(array_ucUS[i].split(":")[0]);
               }
             }
             for(var i=0; i<array_usOB.length-1; i++){
-              if(array_usOB[i].includes(id+":")){
+              if(array_usOB[i].split(":")[0]==id){
                 relation_for.push(array_usOB[i].split(":")[1]);
               }
             }
           }
-          else if(ob.includes(id)){
-            flag = 5;
+          else if(atomicCheck(ob, id)){
             for(var i=0; i<array_usOB.length-1; i++){
-              if(array_usOB[i].includes(":"+id)){
+              if(array_usOB[i].split(":")[1]==id){
                 relation_back.push(array_usOB[i].split(":")[0]);
               }
             }
             for(var i=0; i<array_obMD.length-1; i++){
-              if(array_obMD[i].includes(id+":")){
+              if(array_obMD[i].split(":")[0]==id){
                 relation_for.push(array_obMD[i].split(":")[1]);
               }
             }
 
           }
-          else if(md.includes(id)){
-            flag = 6;
+          else if(atomicCheck(md, id)){
             for(var i=0; i<array_obMD.length-1; i++){
-              if(array_obMD[i].includes(":"+id)){
+              if(array_obMD[i].split(":")[1]==id){
                 relation_back.push(array_obMD[i].split(":")[0]);
               }
             }
             for(var i=0; i<array_mdSC.length-1; i++){
-              if(array_mdSC[i].includes(id+":")){
+              if(array_mdSC[i].split(":")[0]==id){
                 relation_for.push(array_mdSC[i].split(":")[1]);
               }
             }
 
           }
-         else if(sc.includes(id)){
-            flag = 7;
+         else if(atomicCheck(sc, id)){
             for(var i=0; i<array_mdSC.length-1; i++){
-              if(array_mcSC[i].includes(":"+id)){
+              if(array_mdSC[i].split(":")[1]==id){
                 relation_back.push(array_mdSC[i].split(":")[0]);
                 relation_for.push("다음 단계 없음");
               }
             }
           }
-
-
-          forTrace.deleteRow(1);
-          backTrace.deleteRow(1);
-
+          forTrace = deleteRows(forTrace);  //Table 초기화
+          backTrace = deleteRows(backTrace); //Table 초기화
           for(var i=1; i<=relation_for.length;i++){
             var row = forTrace.insertRow(i);
             var cell1 = row.insertCell(0);
             var index0 = total_id.indexOf(id);
             var cell2 = row.insertCell(1);
             var index = total_id.indexOf(relation_for[i-1]);
-
             if(index != -1){
-              cell1.innerHTML = total_name[index0];
+              cell1.innerHTML = total_name[index0]";
             }else{
               cell1.innerHTML = total_name[index0];
               cell2.innerHTML = relation_for[0];
@@ -712,6 +728,7 @@
           }
         }
 
+
         function createIssueInfoTable(id, obj){
           var artifactInfo = document.getElementById("artifact_information");
 
@@ -727,25 +744,40 @@
           cell11.width = "100px";
           cell12.innerHTML = "<input type='text' width='400px' id='"+id+"' value='"+obj['subject']+"' style='width:600px; height:50px;' />";
           cell21.innerHTML = "<font style='font-size: 14px; font-weight: bold;'>내용</font>";
-          cell22.innerHTML = "<textarea name='content' style='width:600px; height:208px;' >"+obj["description"]+"</textarea>";
+          cell22.innerHTML = "<textarea name='content' style='width:600px; height:208px;' >"+obj['description']+"</textarea>";
+        }
+
+        function MDfor(id){
+          for(var i=0; i<=array_mdSC.length-2;i++){
+            if(array_mdSC[i].split(':')[0] == id.split(':')[1]){
+              var el = document.getElementById(array_mdSC[i]);
+              el.style.backgroundColor="pink";
+              if(allId.indexOf(array_mdSC[i].split(':')[1]) == -1){
+                allId.push(array_mdSC[i].split(':')[1]);
+                modifyArray(array_mdSC[i].split(':')[1]);
+              }
+            }
+          }
+          return;
         }
 
         function OBfor(id){
-          for(var i=0; i<array_obMD.length-1;i++){
-            if(array_obMD[i].includes(id.split(':')[1])){
+          for(var i=0; i<array_obMD.length-2;i++){
+            if(array_obMD[i].split(':')[0] == id.split(':')[1]){
               var el = document.getElementById(array_obMD[i]);
               el.style.backgroundColor="pink";
               if(allId.indexOf(array_obMD[i].split(':')[1]) == -1){
                 allId.push(array_obMD[i].split(':')[1]);
                 modifyArray(array_obMD[i].split(':')[1]);
               }
+                MDfor(array_obMD[i]);
             }
           }
           return;
         }
         function USfor(id){
           for(var i=0; i<=array_usOB.length-2;i++){
-            if(array_usOB[i].includes(id.split(':')[1])){
+            if(array_usOB[i].split(':')[0] == (id.split(':')[1])){
               var el = document.getElementById(array_usOB[i]);
               el.style.backgroundColor="pink";
               if(allId.indexOf(array_usOB[i].split(':')[1]) == -1){
@@ -759,7 +791,7 @@
         }
         function UCfor(id){
           for(var i=0; i<=array_ucUS.length-2;i++){
-            if(array_ucUS[i].includes(id.split(':')[1])){
+            if(array_ucUS[i].split(':')[0] == (id.split(':')[1])){
               var el = document.getElementById(array_ucUS[i]);
               el.style.backgroundColor="pink";
               if(allId.indexOf(array_ucUS[i].split(':')[1]) == -1){
@@ -771,22 +803,55 @@
           }
           return;
         }
-        function UCback(id){
-          for(var i=0; i<=array_reqUC.length-2;i++){
-            if(array_reqUC[i].includes(id.split(':')[0])){
-              var el = document.getElementById(array_reqUC[i]);
+
+        function FCfor(id){
+          for(var i=0; i<=array_fcUC.length-2;i++){
+
+            if(array_fcUC[i].split(':')[0] == (id.split(':')[1])){
+              var el = document.getElementById(array_fcUC[i]);
               el.style.backgroundColor="pink";
-              if(allId.indexOf(array_reqUC[i].split(':')[0]) == -1){
-                allId.push(array_reqUC[i].split(':')[0]);
-                modifyArray(array_reqUC[i].split(':')[0]);
+              if(allId.indexOf(array_fcUC[i].split(':')[1]) == -1){
+                allId.push(array_fcUC[i].split(':')[1]);
+                modifyArray(array_fcUC[i].split(':')[1]);
+              }
+              UCfor(array_fcUC[i]);
+            }
+          }
+          return;
+        }
+
+        function FCback(id){
+          for(var i=0; i<=array_reqFC.length-2;i++){
+            if(array_reqFC[i].split(':')[1] == (id.split(':')[0])){
+              var el = document.getElementById(array_reqFC[i]);
+              el.style.backgroundColor="pink";
+              if(allId.indexOf(array_reqFC[i].split(':')[0]) == -1){
+                allId.push(array_reqFC[i].split(':')[0]);
+                modifyArray(array_reqFC[i].split(':')[0]);
               }
             }
           }
           return;
         }
+
+        function UCback(id){
+          for(var i=0; i<=array_fcUC.length-2;i++){
+            if(array_fcUC[i].split(':')[1] == id.split(':')[0]){
+              var el = document.getElementById(array_fcUC[i]);
+              el.style.backgroundColor="pink";
+              if(allId.indexOf(array_fcUC[i].split(':')[0]) == -1){
+                allId.push(array_fcUC[i].split(':')[0]);
+                modifyArray(array_fcUC[i].split(':')[0]);
+              }
+               FCback(array_fcUC[i]);
+            }
+          }
+          return;
+        }
+
         function USback(id){
           for(var i=0; i<=array_ucUS.length-2;i++){
-            if(array_ucUS[i].includes(id.split(':')[0])){
+            if(array_ucUS[i].split(':')[1] == id.split(':')[0]){
               var el = document.getElementById(array_ucUS[i]);
               el.style.backgroundColor="pink";
               if(allId.indexOf(array_ucUS[i].split(':')[0]) == -1){
@@ -800,7 +865,7 @@
         }
         function OBback(id){
           for(var i=0; i<=array_usOB.length-2;i++){
-            if(array_usOB[i].includes(id.split(':')[0])){
+            if(array_usOB[i].split(':')[1] == id.split(':')[0]){
               var el = document.getElementById(array_usOB[i]);
               el.style.backgroundColor="pink";
               if(allId.indexOf(array_usOB[i].split(':')[0]) == -1){
@@ -812,17 +877,40 @@
           }
           return;
         }
+
+        function MDback(id){
+          for(var i=0; i<=array_obMD.length-2;i++){
+            if(array_obMD[i].split(':')[1] == id.split(':')[0]){
+              var el = document.getElementById(array_obMD[i]);
+              el.style.backgroundColor="pink";
+              if(allId.indexOf(array_obMD[i].split(':')[0]) == -1){
+                allId.push(array_obMD[i].split(':')[0]);
+                modifyArray(array_obMD[i].split(':')[0]);
+              }
+              OBback(array_obMD[i]);
+            }
+          }
+          return;
+        }
+
+
         function findStartPoint(el){
           var start = el.id;
           var startpoint = start.split(':');
-
           var el = document.getElementById(start);
-          el.style.backgroundColor="pink";
-          if(reqUC.includes(start)){
+          el.style.backgroundColor="gray";
+          if(reqFC.includes(start)){
             allId.push(start.split(':')[0]);
             allId.push(start.split(':')[1]);
             modifyArray(start.split(':')[0]);
             modifyArray(start.split(':')[1]);
+            FCfor(start);
+          }else if(fcUC.includes(start)){
+            allId.push(start.split(':')[0]);
+            allId.push(start.split(':')[1]);
+            modifyArray(start.split(':')[0]);
+            modifyArray(start.split(':')[1]);
+            FCback(start);
             UCfor(start);
           }else if(ucUS.includes(start)){
             allId.push(start.split(':')[0]);
@@ -844,18 +932,24 @@
             modifyArray(start.split(':')[0]);
             modifyArray(start.split(':')[1]);
             OBback(start);
+            MDfor(start);
+          }else if(mdSC.includes(start)){
+            allId.push(start.split(':')[0]);
+            allId.push(start.split(':')[1]);
+            modifyArray(start.split(':')[0]);
+            modifyArray(start.split(':')[1]);
+            MDback(start);
           }
           artifactsAdd();
         }
 
-        function fetchData(ida){
-          var id = ida.split("!")[0];
+        function fetchData(id){
           var fetch_data = new Array();
             $.ajax({
-                url:"getIdInfo.jsp",
+                url:"getIdInfo.jsp?id="+id,
                 method:"POST",
                 async: false,
-                data:{id:id},
+                dataType:'text',
                 success:function(data){
                     fetch_data = data;
                 }
@@ -888,9 +982,10 @@
 </html>
 <script>
   $("#artifacts_table").on("click", function(cell){
-    if(artifactsClickCount==0){
+ /* if(artifactsClickCount==0){
       initArtifacts();
-    }
+    }*/
+    initArtifacts();
     $cell = $(cell.target);
     $cellId = $cell.attr('id');
     var el2 = document.getElementById($cellId);
