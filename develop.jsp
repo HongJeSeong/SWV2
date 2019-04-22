@@ -29,7 +29,7 @@
   /* char bar */
   .graph {
       position: relative; /* IE is dumb */
-      width: 100%;
+      width: 90%;
       border: 1px solid #ffd01f;
       padding: 0.5px;
   font-size:11px;
@@ -39,13 +39,35 @@
   .graph .bar {
       display: block;
       position: relative;
-      background: #ffd01f;
+      background: green;
       text-align: center;
       color: #333;
       height: 2em;
       line-height: 2em;
   }
   .graph .bar span { position: absolute; left: 1em; }
+
+  /* char bar2 */
+  .graph2 {
+      position: relative; /* IE is dumb */
+      width: 90%;
+      border: 1px solid #ffd01f;
+      padding: 0.5px;
+  font-size:11px;
+  font-family:tahoma;
+  margin-bottom:2px;
+  }
+  .graph2 .bar2 {
+      display: block;
+      position: relative;
+      background: #ffd01f;
+      text-align: center;
+      color: #333;
+      height: 2em;
+      line-height: 2em;
+  }
+  .graph2 .bar2 span { position: absolute; left: 1em; }
+
 </style>
 
 <script src="http://code.jquery.com/jquery-1.10.2.js"></script>
@@ -55,7 +77,7 @@
                 var res;
                  $.ajax({
                      type: 'get'
-                     , url: ''
+                     , url: 'http://203.249.87.165/jenkins/job/'+name+'/lastBuild/'
                      , async: false
                      , dataType : 'html'
                      , success: function(data) {
@@ -81,22 +103,58 @@
                 var betweenDay = (buildDate - start)/total;
                 var result = (betweenDay/(1000*3600*24))*100;
                 var td = document.getElementById(id+"day");
-                var val = Math.round(result)
+                var val = Math.round(result);
                 var bar = "<div class='graph'><strong class='bar' style='width:"+val+"%;'>"+val+"%</strong></div>";
                 td.innerHTML=bar;//round methods
 
+        }
 
-                               }
+        function reqSatis(req, id){
+                var td = document.getElementById(id + "req");
+                var reqValue = Math.round(req);
+                var bar = "<div class='graph2'><strong class='bar2' style='width:"+reqValue+"%;'>"+reqValue+"%</strong></div>"
+                td.innerHTML=bar;
+        }
+      <%
+      Connection conn = null;
+      PreparedStatement pstmt = null;
+      PreparedStatement pstmt2 = null;
+      PreparedStatement pstmt3 = null;
 
+      try{
+         String jenkinsURL = "http://localhost/jenkins/job/P0001_CarGoodsMan/lastSuccessfulBuild/api/json?tree=timestamp";
+         String user="admin";
+         String password = "110349a01a38537c16e32a4f1ec78178a3";
 
-</script>
+        // String build = scrape(jenkinsURL, user, password);
+
+         String url = "jdbc:mysql://localhost:3306/redmine_default";
+         String id = "root";
+         String pw = "409264";
+         Class.forName("com.mysql.jdbc.Driver");
+         conn=DriverManager.getConnection(url,id,pw);
+
+         String sql = "select id,name,description, identifier FROM projects;";
+         String sql_req1 = "SELECT count(*) cnt From issues WHERE tracker_id = 6 AND project_id=?;";
+         String sql_req2 = "SELECT count(*) cnt FROM issues WHERE tracker_id = 6 AND done_ratio=100 AND project_id=?;";
+         pstmt = conn.prepareStatement(sql);
+         ResultSet rs = pstmt.executeQuery();
+         ResultSet rs2 = null;
+         ResultSet rs3 = null;
+
+         rs.last();
+         int columnCnt = rs.getRow() ;
+         out.println(columnCnt);
+         rs.beforeFirst();
+        %>
+        </script>
 </head>
 <body>
   <h1 align="center">개발 진행현황</h1>
   <div>
   <div align="left">
  <form>
-    건수:0건&nbsp;■사업 연도:
+         <% out.println("건수:"+columnCnt+"건&nbsp;■사업 연도:");%>
 <select name="">
     <option value="all"  selected="selected">전체보기</option>
     <option value="">??</option>
@@ -132,39 +190,14 @@
      <td rowspan="2">종료</td>
      <td rowspan="2">기간<br>(월)</td>
      <td rowspan="2">최종 빌드일</td>
-     <td rowspan="2">사업기간 결과<br>사업추진 현황</td>
-     <td rowspan="2">요구사항(완료/총)</td>
+     <td rowspan="2">사업기간 경과</td>
+     <td rowspan="2">요구사항만족률<br>요구사항(완료/총)</td>
      <td rowspan="2">간트차트</td>
      <td rowspan="2">가시화</td>
     </tr>
     <tr class="table-row color-back">
     </tr>
-      <%
-      Connection conn = null;
-      PreparedStatement pstmt = null;
-      PreparedStatement pstmt2 = null;
-      PreparedStatement pstmt3 = null;
-
-      try{
-         String jenkinsURL = "";
-         String user="";
-         String password = "";
-
-        // String build = scrape(jenkinsURL, user, password);
-
-         String url = "";
-         String id = "";
-         String pw = "";
-         Class.forName("com.mysql.jdbc.Driver");
-         conn=DriverManager.getConnection(url,id,pw);
-
-         String sql = "select id,name,description, identifier FROM projects;";
-         String sql_req1 = "SELECT count(*) cnt From issues WHERE tracker_id = 6 AND project_id=?;";
-         String sql_req2 = "SELECT count(*) cnt FROM issues WHERE tracker_id = 6 AND done_ratio=100 AND project_id=?;";
-         pstmt = conn.prepareStatement(sql);
-         ResultSet rs = pstmt.executeQuery();
-         ResultSet rs2 = null;
-         ResultSet rs3 = null;
+        <%
 
          String name ="";
          String description = null;
@@ -203,21 +236,22 @@
                 pstmt2 = conn.prepareStatement(sql_req1);
                 pstmt2.setInt(1, Integer.parseInt(id));
                 rs2 = pstmt2.executeQuery();
-                String reqTotal = null;
+                int reqTotal = 0;
                 if(rs2.next()){
-                        reqTotal = rs2.getInt("cnt")+"";
+                        reqTotal = rs2.getInt("cnt");
                 }
 
                 pstmt3 = conn.prepareStatement(sql_req2);
                 pstmt3.setInt(1, Integer.parseInt(id));
                 rs3 = pstmt3.executeQuery();
-                String reqDone = null;
+                int reqDone = 0;
                 if(rs3.next()){
-                        reqDone = rs3.getInt("cnt")+"";
+                        reqDone = rs3.getInt("cnt");
                 }
-                output += "<td>" + reqDone + " / " + reqTotal + "</td>";
+                double reqSatisfaction = ((double)reqDone / (double)reqTotal) * 100;
+                output += "<td id='" + name + "req'><script>reqSatis(" + reqSatisfaction + ",'" + name +  "');</script></td>";
                 output += "<td>" + "<a href=" + "\"" + "/redmine/projects/" + identifier + "/issues/gantt" + "\"" + "><img width=30 height=30 src=" + "\"" + "gant.png" + "\"" + "/></a>" + "</td>"
-                        + "<td><a href=" + "\"" + "./dashboard.jsp?" +name+ "\"" + "><img width=30 height=30 src=" + "\"" + "visual.png" + "\"" + "</td></tr>";
+                        + "<td><a href=" + "\"" + "./dashboard.jsp?name=" +name+ "\"" + "><img width=30 height=30 src=" + "\"" + "visual.png" + "\"" + "</td></tr>";
                 out.println();
                 out.println(output);
          }
